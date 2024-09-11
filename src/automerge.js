@@ -22,6 +22,7 @@ async function getBranchHierarchy(config) {
     .map((item) => item.name) // we only care about branch names
     .filter((item) => item.startsWith(config.pattern)) // ignore non-release branches for sort
     .map((item) => item.split(config.pattern)[1]) // version compare needs the prefix removed
+    .map((item) => semver.coerce(item)) // coerce the version to a semver object
     .filter(semver.valid) // remove any branches that will not be valid for sorting upon
     .sort(semver.compare) // sorts lowest to highest version
     .map((item) => config.pattern + item); // put the release branch pattern back
