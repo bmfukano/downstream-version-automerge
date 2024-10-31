@@ -123,7 +123,7 @@ async function run() {
   const actionsTaken = [];
 
   const config = {
-    prod: core.getInput('production-branch') || 'master',
+    prod: core.getInput('production-branch') || '',
     dev: core.getInput('development-branch') || '',
     pattern: core.getInput('release-pattern') || 'release/',
     mergeTpl: core.getInput('merge-message-template'),
