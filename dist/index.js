@@ -13638,6 +13638,10 @@ async function getBranchHierarchy(config) {
     .map((item) => semver.coerce(item)) // coerce the version to a semver object
     .filter(semver.valid) // remove any branches that will not be valid for sorting upon
     .sort(semver.compare) // sorts lowest to highest version
+    .map((item) => {
+      const version = semver.parse(item);
+      return `${version.major}.${version.minor}`
+    })
     .map((item) => config.pattern + item); // put the release branch pattern back
 
   // put prod branch name at front of branch list
@@ -13759,11 +13763,14 @@ async function run() {
 
     /* eslint-disable no-await-in-loop */
     if (await merge(item.src, item.tgt, config)) {
+      console.log(`Merged ${item.src} into ${item.tgt}`);
       actionsTaken.push(`Merged ${item.src} into ${item.tgt}`);
     } else if (config.prOnFail && (await mergeRequest(item.src, item.tgt, config))) {
+      console.log(`Pull Request Created for ${item.src} into ${item.tgt}`);
       actionsTaken.push(`Pull Request Created for ${item.src} into ${item.tgt}`);
       break; // out of mergeSpec loop since a PR was
     } else {
+      console.log(`unable merge or create a merge request for ${item.src} into ${item.tgt}`);
       actionsTaken.push(`unable merge or create a merge request for ${item.src} into ${item.tgt}`);
       core.setFailed(`Both Merge and Pull Requests failed`);
       break;

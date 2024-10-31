@@ -10,11 +10,11 @@ inputs:
   production-branch:
     description: Primary branch matching the production environment.
     required: false
-    default: main
+    default: prod
   development-branch:
     description: Optional Branch where active development is integrated into.
     required: false
-    default: develop
+    default: main
   release-pattern:
     description: Release Branch naming pattern
     required: false
